@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Banking Classifier</title>
+    <style>
+        /* Center everything */
+        body {
+            font-family: Arial;
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        
+        /* Input box styling */
+        textarea {
+            width: 100%;
+            height: 80px;
+            font-size: 16px;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        /* Button styling */
+        button {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            background-color: #0056b3;
+        }
+        
+        /* Result box styling */
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            display: none; /* Hidden by default */
+        }
+    </style>
+</head>
+<body>
+    <h1>Banking Query Classifier</h1>
+    
+    <!-- Input box -->
+    <textarea id="queryInput" placeholder="Enter your banking query here..."></textarea>
+    
+    <!-- Classify button -->
+    <button onclick="classify()">Classify</button>
+    
+    <!-- Result display -->
+    <div id="result"></div>
+    
+    <script>
+        // Function that runs when button is clicked
+        function classify() {
+            // Get the text from input box
+            const text = document.getElementById('queryInput').value;
+            
+            // Check if empty
+            if (!text) {
+                alert('Please enter a query!');
+                return;
+            }
+            
+            // Show loading message
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = 'Loading...';
+            
+            // Send request to API
+            fetch('http://localhost:8000/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ text: text })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Show the result
+                resultDiv.innerHTML = `
+                    <strong>Category:</strong> ${data.predicted_category}<br>
+                    <strong>Confidence:</strong> ${data.confidence}
+                `;
+            })
+            .catch(error => {
+                // Show error if something goes wrong
+                resultDiv.innerHTML = 'Error: ' + error.message;
+            });
+        }
+    </script>
+</body>
+</html>

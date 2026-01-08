@@ -1,6 +1,7 @@
 # app/main.py - Complete FastAPI Application for Banking Query Classifier
 
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import Optional, List
 import uvicorn
@@ -45,6 +46,17 @@ app = FastAPI(
     version="1.0.0",
     docs_url="/docs",
     redoc_url="/redoc"
+)
+
+# Add CORS middleware to allow browser requests
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allow all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all methods
+    allow_headers=["*"],  # Allow all headers
 )
 
 # Request and Response models
@@ -300,3 +312,12 @@ if __name__ == "__main__":
         reload=True,
         log_level="info"
     )
+
+# Your API Endpoints:
+
+# Docs: http://localhost:8000/docs
+# Root: http://localhost:8000/
+# Health Check: http://localhost:8000/health
+# Categories List: http://localhost:8000/categories
+# Single Prediction: POST http://localhost:8000/predict
+# Batch Prediction: POST http://localhost:8000/predict/batch
