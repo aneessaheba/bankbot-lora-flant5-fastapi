@@ -7,3 +7,16 @@ peft==0.8.0
 accelerate==0.25.0
 huggingface-hub==0.20.0
 python-multipart==0.0.6
+torch==2.1.2
+transformers==4.39.3
+peft==0.10.0
+numpy<2
+
+
+
+
+
+
+
+
+
